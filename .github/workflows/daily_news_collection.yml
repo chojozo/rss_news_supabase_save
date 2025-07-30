@@ -1,34 +1,39 @@
 name: Daily News Collection
 
 on:
-  workflow_dispatch:      # 👈 수동 실행 가능!
+  workflow_dispatch:        # 수동 실행 가능
   schedule:
-    - cron: '0 23 * * *'   # 매일 오전 8시(KST)
+    - cron: '0 23 * * *'     # 매일 8AM KST (23:00 UTC)
 
 jobs:
-  build:
+  collect-news:
     runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
 
     steps:
-    - name: Checkout repository
+    - name: ✅ Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: 🐍 Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+    - name: 📦 Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-    - name: Run irobotnews collector
+    - name: 📰 Run iRobotNews Collector
       run: python collect_irobotnews.py
 
-    - name: Run MIT news collector
+    - name: 🧠 Run MIT News Collector
       run: python collect_MIT_news.py
 
-    - name: Run The Verge news collector
+    - name: 🧾 Run The Verge News Collector
       run: python collect_theverge_news.py
 
-    - name: Run VentureBeat news collector
+    - name: 💼 Run VentureBeat News Collector
       run: python collect_venturebeat_news.py
