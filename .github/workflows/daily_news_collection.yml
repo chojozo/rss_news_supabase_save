@@ -1,8 +1,9 @@
 name: Daily News Collection
 
 on:
+  workflow_dispatch:      # 👈 수동 실행 가능!
   schedule:
-    - cron: '0 23 * * *' # Runs daily at 8 AM KST (23:00 UTC)
+    - cron: '0 23 * * *'   # 매일 오전 8시(KST)
 
 jobs:
   build:
@@ -15,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Use a recent Python version
+        python-version: '3.x'
 
     - name: Install dependencies
       run: pip install -r requirements.txt
