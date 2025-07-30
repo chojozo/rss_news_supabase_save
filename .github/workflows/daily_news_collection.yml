@@ -1,0 +1,33 @@
+name: Daily News Collection
+
+on:
+  schedule:
+    - cron: '0 23 * * *' # Runs daily at 8 AM KST (23:00 UTC)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x' # Use a recent Python version
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run irobotnews collector
+      run: python collect_irobotnews.py
+
+    - name: Run MIT news collector
+      run: python collect_MIT_news.py
+
+    - name: Run The Verge news collector
+      run: python collect_theverge_news.py
+
+    - name: Run VentureBeat news collector
+      run: python collect_venturebeat_news.py
