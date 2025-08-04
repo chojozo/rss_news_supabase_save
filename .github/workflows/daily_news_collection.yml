@@ -37,3 +37,6 @@ jobs:
 
     - name: 💼 Run VentureBeat News Collector
       run: python collect_venturebeat_news.py
+
+    - name:  Crunching Tech News
+      run: python collect_techcrunch_news.py
