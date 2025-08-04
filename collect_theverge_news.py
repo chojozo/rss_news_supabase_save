@@ -17,8 +17,11 @@ SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# The Verge AI RSS 피드 URL
-NEWS_URL = "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"
+# The Verge RSS 피드 URL 목록 (AI, Tech)
+NEWS_URLS = [
+    "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+    "https://www.theverge.com/rss/tech/index.xml"
+]
 
 def fetch_article_content(url):
     """기사 URL에서 본문 내용을 추출합니다."""
@@ -62,8 +65,9 @@ def fetch_article_content(url):
         return None
 
 def main():
-    print(f"Fetching news from {NEWS_URL}...")
-    feed = feedparser.parse(NEWS_URL)
+    for news_url in NEWS_URLS:
+        print(f"Fetching news from {news_url}...")
+        feed = feedparser.parse(news_url)
 
     # 현재 시간(UTC)
     now = datetime.now(timezone.utc)
@@ -109,7 +113,7 @@ def main():
                         "published_at": published,
                         "summary": summary,
                         "full_content": full_content or summary,
-                        "source": "The Verge AI"
+                        "source": "The Verge"
                     }).execute()
                     print(f"Inserted: {title}")
                 else:
