@@ -3,7 +3,7 @@ name: Daily News Collection
 on:
   workflow_dispatch:        # 수동 실행 가능
   schedule:
-    - cron: '0 2 * * *'     # 매일 8AM KST (23:00 UTC)
+    - cron: '50 22 * * *'  # 매일 KST 오전 7시 50분에 실행
 
 jobs:
   collect-news:
