@@ -1,4 +1,3 @@
-
 import os
 import feedparser
 import requests
@@ -8,6 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
+from dateutil import parser
 
 # .env 파일에서 환경 변수 로드
 load_dotenv()
@@ -48,7 +48,7 @@ def get_article_content(url):
 for entry in feed.entries:
     # 게시 시간을 파싱하여 UTC 시간으로 변환 (VentureBeat는 다른 포맷을 사용할 수 있으므로 확인 필요)
     try:
-        published_time = datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %z').astimezone(timezone.utc)
+                published_time = parser.parse(entry.published).astimezone(timezone.utc)
     except ValueError:
         # 다른 시간 포맷 시도 (예시)
         try:
