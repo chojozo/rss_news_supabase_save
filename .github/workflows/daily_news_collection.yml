@@ -29,6 +29,9 @@ jobs:
     - name: 📰 Run iRobotNews Collector
       run: python collect_irobotnews.py
 
+    - name: 📰 Run AITimes Collector
+      run: python collect_aitimes_news.py
+
     - name: 🧠 Run MIT News Collector
       run: python collect_MIT_news.py
 
