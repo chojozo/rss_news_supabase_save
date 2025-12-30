@@ -19,8 +19,13 @@ supabase: Client = create_client(url, key)
 # RSS 피드 URL
 rss_url = "https://www.technologyreview.com/topic/artificial-intelligence/feed/"
 
-# RSS 피드 파싱
-feed = feedparser.parse(rss_url)
+# User-Agent 헤더 추가하여 RSS 피드 파싱
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+}
+response = requests.get(rss_url, headers=headers, timeout=10)
+feed = feedparser.parse(response.text)
 
 # 현재 시간(UTC)
 now = datetime.now(timezone.utc)
@@ -28,14 +33,25 @@ now = datetime.now(timezone.utc)
 # 웹 페이지에서 본문 내용을 추출하는 함수
 def get_article_content(url):
     try:
-        response = requests.get(url)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(response.content, 'html.parser')
-        # MIT Technology Review 기사 본문 선택자 (id로 변경)
+
+        # MIT Technology Review 기사 본문 선택자
         content_div = soup.find('div', id='content--body')
         if content_div:
-            return content_div.get_text(strip=True)
+            paragraphs = content_div.find_all('p')
+            # 문단들을 줄바꿈으로 구분하여 결합
+            full_text = '\n\n'.join([
+                p.get_text(strip=True)
+                for p in paragraphs
+                if p.get_text(strip=True)
+            ])
+            return full_text if full_text else None
         else:
-            print(f"본문 content_div를 찾지 못했습니다: {url}")
+            print(f"본문을 찾지 못했습니다: {url}")
             return None
     except Exception as e:
         print(f"본문 내용을 가져오는 중 오류 발생: {e}")
