@@ -4,7 +4,7 @@ on:
   workflow_dispatch:        # 수동 실행 가능
   schedule:
     - cron: '50 22 * * *'  # 매일 KST 오전 7시 50분에 실행
-    - cron: '0 11 * * *'   # 매일 KST 오후 8시에 실행
+    - cron: '10 11 * * *'  # 매일 KST 오후 8시 10분에 실행
 
 jobs:
   collect-news:
