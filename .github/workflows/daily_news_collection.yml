@@ -1,4 +1,4 @@
-name: Daily News Collection
+name: Daily News Collection #260309
 
 on:
   workflow_dispatch:        # 수동 실행 가능
